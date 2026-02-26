@@ -1,0 +1,14 @@
+import '@/app/ui/global.css' //@ means the root i'm pretty sure.
+import { inter, lusitana } from '@/app/ui/fonts'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className = {`${inter.className} antialiased`}>{children}</body>
+    </html>
+  );
+}
