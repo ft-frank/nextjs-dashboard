@@ -9,7 +9,11 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const globalForSql = globalThis as unknown as { sql: ReturnType<typeof postgres> };
+
+const sql = globalForSql.sql ?? postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+if (process.env.NODE_ENV !== 'production') globalForSql.sql = sql;
 
 export async function fetchRevenue() {
   try {
@@ -21,7 +25,7 @@ export async function fetchRevenue() {
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
-    // console.log('Data fetch completed after 3 seconds.');
+    console.log('Data fetch completed after 3 seconds.');
 
     return data;
   } catch (error) {
